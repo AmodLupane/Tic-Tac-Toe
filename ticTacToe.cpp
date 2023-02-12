@@ -103,9 +103,9 @@ int minimax(char board[][SIDE], int depth, bool isAI)
     if(gameOver(board) == true)
     {
         if(isAI == true)
-            return -10;
+            return INT_MIN;
         else if(isAI == false)
-            return +10;
+            return INT_MAX;
     }
     else
     {
@@ -113,7 +113,7 @@ int minimax(char board[][SIDE], int depth, bool isAI)
         {
             if(isAI == true)
             {
-                bestScore = -999;
+                bestScore = INT_MIN;
                 for(int i=0; i<SIDE; i++)
                 {
                     for(int j=0; j<SIDE; j++)
@@ -121,7 +121,7 @@ int minimax(char board[][SIDE], int depth, bool isAI)
                         if(board[i][j] == '*')
                         {
                             board[i][j] = COMPUTERMOVE; 
-                            score = minimax(board, (depth+1), false);
+                            score = minimax(board, depth+1, false);
                             board[i][j] = '*';
                             if(score > bestScore)
                             {
@@ -134,7 +134,7 @@ int minimax(char board[][SIDE], int depth, bool isAI)
             }
             else
             {
-                bestScore = 999;
+                bestScore = INT_MAX;
                 for(int i=0; i<SIDE; i++)
                 {
                     for(int j=0; j<SIDE; j++)
@@ -164,15 +164,15 @@ int minimax(char board[][SIDE], int depth, bool isAI)
 int bestMove(char board[][SIDE], int moveIndex)
 {
     int x = -1, y = -1;
-    int score = 0, bestScore = -999;
+    int score = 0, bestScore = INT_MIN;
     for(int i=0; i<SIDE; i++)
     {
         for(int j=0; j<SIDE; j++)
         {
-            if(board[i][j] = '*')
+            if(board[i][j] == '*')
             {
                 board[i][j] = COMPUTERMOVE;
-                score = minimax(board, (moveIndex+1), false);
+                score = minimax(board, moveIndex+1, false);
                 board[i][j] = '*';
                 if(score > bestScore)
                 {
@@ -216,12 +216,13 @@ void playTTT(int whoseTurn)
                     if(board[i][j] == '*')
                         cout<<(i*3+j)+1<<" ";
             printf("\nEnter the position : ");
-            scanf("%d",&n);
+            cin>>n;
+            n--;
             x = n/SIDE;
             y = n%SIDE;
             if((board[x][y] == '*') && (n<9 && n>=0))
             {
-                board[x][y] == HUMANMOVE;
+                board[x][y] = HUMANMOVE;
                 cout<<"\nHUMAN has played "<<HUMANMOVE<<" in cell "<<n+1<<endl<<endl;
                 showBoard(board);
                 moveIndex++;
@@ -253,13 +254,22 @@ void playTTT(int whoseTurn)
 
 int main()
 {
-    cout<<"********** Welcome To The Tic Tac Toe Game **********"<<endl;
+    cout<<"_________________               _________________                         _________________                             "<<endl;
+    cout<<"|               |               |               |                         |               |                             "<<endl;
+    cout<<"|_____     _____|               |_____     _____|                         |_____     _____|                             "<<endl;
+    cout<<"      |    |                          |    |                                    |    |                                  "<<endl;
+    cout<<"      |    |                          |    |                                    |    |                                  "<<endl;
+    cout<<"      |    |   __                     |    |                                    |    |                                  "<<endl;
+    cout<<"      |    |  /_/   _________         |    |      ____       _________          |    |    __________     _________      "<<endl;
+    cout<<"      |    |   _   |   ______|        |    |     / _  \\     |   ______|         |    |   |   ____   |   |   ___   |    "<<endl;
+    cout<<"      |    |  | |  |  |               |    |    / /_\\  \\    |  |                |    |   |  |    |  |   |    _____|   "<<endl;
+    cout<<"      |    |  | |  |  |______         |    |   / /___\\  \\   |  |______          |    |   |  |____|  |   |   |______   "<<endl;
+    cout<<"      |____|  |_|  |_________|        |____|  /_/     \\ _\\  |_________|         |____|   |__________|   |__________|  "<<endl;
     char cont = 'y';
-    do
-    {
+    do{
         char choice;
-        cout<<"Do you want to start first ? (Enter 'y' for Yes and 'n' for No)"<<endl;
-        scanf("%c",&choice);
+        cout<<"\n\nDo you want to start first ? (Enter 'y' for Yes and 'n' for No)   -->  ";
+        cin>>choice;
 
         switch (choice)
         {
@@ -274,9 +284,9 @@ int main()
             break;
         }
 
-        cout<<"Do you want to quit the game? (Enter 'y' for Yes and 'n' for No)"<<endl;
-        scanf("%c",&cont);
+        cout<<"\n\nDo you want to quit the game? (Enter 'y' for Yes and 'n' for No)  -->  ";
+        cin>>cont;
 
-    } while (cont == 'n');
+    }while (cont == 'n');
     return 0;    
 }
